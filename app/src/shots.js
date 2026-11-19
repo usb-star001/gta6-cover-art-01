@@ -1,38 +1,21 @@
-// Fixed scenes for screenshots: ?shot=cover shows the cover alone at a chosen
-// size, ?shot=editor shows the editor with a sample photo loaded. The query picks
-// the photo (a bundled sample), the caption, the layout and the aspect.
-// window.__shotReady is set once the scene has painted.
-
-/** Wait for two animation frames so the canvas has painted. */
-function painted() {
-  return new Promise((resolve) => {
-    requestAnimationFrame(() => requestAnimationFrame(resolve));
-  });
-}
-
+// Fixed scenes for screenshots: ?shot=cover shows the cover alone, ?shot=editor
+// shows the full editor with a photo loaded. `scene` picks the sample scene,
+// `caption` the words, `layout` and `grade` the look. window.__shotReady is
+// set once the scene is painted, so a screenshot tool knows when to shoot.
 export async function runShot(shot, query, api) {
-  const photo = query.get('photo') ?? 'pier';
-  const other = photo === 'pier' ? 'boulevard' : 'pier';
-  api.setCaption(query.get('caption') ?? 'VICE CITY');
-  api.setTagline(query.get('tagline') ?? 'SUNSET HEIST');
-  api.setEyebrow(query.get('eyebrow') ?? 'VICE CITY');
-  api.setLayout(query.get('layout') ?? 'hero');
-  api.setAspect(query.get('aspect') ?? 'square');
-  await api.loadSample(photo);
-  await api.loadSample(other);
-  try {
-    await document.fonts.load('100px Anton');
-    await document.fonts.ready;
-  } catch {
-    // The fallback face still paints.
-  }
+  const scene = query.get('scene') ?? 'sunset';
+  const caption = query.get('caption') ?? 'Vice Lights';
+  const sub = query.get('sub') ?? null;
+  const layout = query.get('layout') ?? 'triptych';
+  const grade = query.get('grade') ?? 'sunset';
   if (shot === 'cover') {
     document.body.classList.add('shot-cover');
-    const size = (query.get('size') ?? '1080x1080').split('x').map(Number);
-    api.renderCoverOnly(size[0], size[1]);
+    api.applyShotState({ scene, caption, sub, layout, grade });
   } else {
-    api.renderPreview();
+    api.applyShotState({ scene, caption, sub, layout, grade });
   }
-  await painted();
-  window.__shotReady = true;
+  await api.waitPaint();
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    window.__shotReady = true;
+  }));
 }
