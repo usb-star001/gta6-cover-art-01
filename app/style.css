@@ -1,0 +1,233 @@
+/* Neon Vice editor — dark stage, neon pink and teal accents. */
+@font-face {
+  font-family: "Anton";
+  src: url("./fonts/Anton-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #0b0214;
+  --panel: #170a26;
+  --panel-line: #2c1544;
+  --ink: #f6ecff;
+  --muted: #b9a3cf;
+  --pink: #ff2e88;
+  --orange: #ff7a18;
+  --teal: #2de2c5;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--panel-line);
+  background: linear-gradient(90deg, #1c0533, #2b0a2e 55%, #0b0214);
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  color: #fff;
+  font-family: Anton, "Arial Black", sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  box-shadow: 0 0 18px rgba(255, 46, 136, 0.55);
+}
+
+.brand h1 {
+  margin: 0;
+  font-family: Anton, "Arial Black", sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  line-height: 1;
+}
+
+.brand p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
+
+.aspect-switch, .layout-row, .export-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+button {
+  cursor: pointer;
+  border: 1px solid var(--panel-line);
+  border-radius: 8px;
+  background: #22103a;
+  color: var(--ink);
+  font: inherit;
+  padding: 8px 12px;
+}
+
+button:hover { border-color: var(--pink); }
+
+button.on {
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  border-color: transparent;
+  color: #fff;
+  font-weight: 700;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 350px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px 20px 28px;
+  align-items: start;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-line);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.controls h2 {
+  margin: 20px 0 8px;
+  font-family: Anton, "Arial Black", sans-serif;
+  font-weight: 400;
+  font-size: 17px;
+  letter-spacing: 2px;
+  color: var(--teal);
+}
+
+.controls h2:first-child { margin-top: 0; }
+
+.controls label { display: block; margin: 10px 0; font-size: 13px; color: var(--muted); }
+.controls label span { color: var(--ink); font-weight: 700; }
+
+.controls input[type="text"], .controls select {
+  width: 100%;
+  margin-top: 4px;
+  padding: 9px 10px;
+  border: 1px solid var(--panel-line);
+  border-radius: 8px;
+  background: #0f051c;
+  color: var(--ink);
+  font: inherit;
+}
+
+.controls input[type="range"] { width: 100%; accent-color: var(--pink); }
+
+.controls input[type="checkbox"] { accent-color: var(--pink); }
+
+.check { display: flex !important; align-items: center; gap: 8px; color: var(--ink) !important; }
+
+.file-btn {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.file-btn input { display: none; }
+
+.sample-row { display: flex; gap: 8px; margin-top: 8px; }
+.sample-row button { flex: 1; }
+
+.thumbs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.thumbs:empty { display: none; }
+
+.thumbs button {
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.thumbs button.in-panel { border-color: var(--teal); }
+
+.thumbs img { width: 72px; height: 72px; object-fit: cover; display: block; }
+
+.note { color: var(--muted); font-size: 12px; margin: 6px 0 0; }
+
+.panel-label { font-size: 13px; color: var(--ink); }
+
+.ghost { width: 100%; }
+
+.export-row { flex-direction: column; }
+.export-row .export {
+  width: 100%;
+  text-align: left;
+  background: linear-gradient(135deg, #3d0a5e, #7a1040);
+  border-color: #57207a;
+  font-weight: 700;
+}
+
+.export-row .export:hover { border-color: var(--pink); }
+
+#status { color: var(--teal); font-size: 13px; min-height: 20px; }
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background:
+    radial-gradient(600px 300px at 20% 0%, rgba(255, 46, 136, 0.18), transparent 70%),
+    radial-gradient(600px 300px at 90% 100%, rgba(45, 226, 197, 0.12), transparent 70%),
+    var(--panel);
+}
+
+#preview {
+  max-width: 100%;
+  max-height: 76vh;
+  width: auto;
+  height: auto;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  cursor: crosshair;
+  background: #fff;
+}
+
+.hint { color: var(--muted); font-size: 13px; margin: 0; text-align: center; }
+
+/* Screenshot scenes: cover alone, or the editor with a photo loaded. */
+body.shot-cover .topbar,
+body.shot-cover .controls,
+body.shot-cover .hint { display: none; }
+
+body.shot-cover .layout { display: block; padding: 0; }
+
+body.shot-cover .stage {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: #000;
+}
+
+body.shot-cover #preview {
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+}
