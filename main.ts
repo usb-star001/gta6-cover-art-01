@@ -6,7 +6,7 @@
 // Outside the grader MAKEFUN_OUTPUT_DIR stands in for /output; inside the
 // grader the program runs twice and both runs must write the same bytes.
 
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-app.ts';
@@ -29,8 +29,12 @@ const DOSSIER_LIMITS = {
 
 function handIn() {
   // Start from an empty output directory so a second run writes identical bytes.
-  rmSync(outputDir, { recursive: true, force: true });
+  // Empty its CONTENTS only — never delete the directory itself: in the grader
+  // its parent is read-only, so removing it fails with EACCES (exit 1).
   mkdirSync(outputDir, { recursive: true });
+  for (const entry of readdirSync(outputDir)) {
+    rmSync(join(outputDir, entry), { recursive: true, force: true });
+  }
 
   // The app: plain static files, served offline from app/index.html.
   cpSync(join(repoRoot, 'app'), join(outputDir, 'app'), { recursive: true });
